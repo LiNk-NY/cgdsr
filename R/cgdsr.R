@@ -26,43 +26,46 @@ setMethodS3("setVerbose","CGDS", function(x, verbose, ...) {
   return(verbose)
 })
 
+.makeURL <- function(url_location, ...) {
+    file.path(url_location, paste0(...))
+}
+
 setMethodS3("getCancerStudies","CGDS", function(x, ...) {
-  url = paste(x$.url, "webservice.do?cmd=getCancerStudies&",sep="")
+  url = .makeURL(x$.url, "webservice.do?cmd=getCancerStudies&")
   df = processURL(x,url)
   return(df)
 })
 
 setMethodS3("getCaseLists","CGDS", function(x, cancerStudy, ...) {
-  url = paste(x$.url, "webservice.do?cmd=getCaseLists&cancer_study_id=", cancerStudy, sep="")
+  url = .makeURL(x$.url, "webservice.do?cmd=getCaseLists&cancer_study_id=", cancerStudy)
   df = processURL(x,url)
   return(df)
 })
 
 setMethodS3("getGeneticProfiles","CGDS", function(x, cancerStudy, ...) {
-  url = paste(x$.url, "webservice.do?cmd=getGeneticProfiles&cancer_study_id=", cancerStudy, sep="")
+  url = .makeURL(x$.url, "webservice.do?cmd=getGeneticProfiles&cancer_study_id=", cancerStudy)
   df = processURL(x,url)
   return(df)
 })
 
 setMethodS3("getMutationData","CGDS", function(x, caseList, geneticProfile, genes, ...) {
-  url = paste(x$.url, "webservice.do?cmd=getMutationData",
+  url = .makeURL(x$.url, "webservice.do?cmd=getMutationData",
     "&case_set_id=", caseList,
     "&genetic_profile_id=", geneticProfile,
-    "&gene_list=", paste(genes,collapse=","), sep="")
+    "&gene_list=", paste(genes,collapse=","))
   df = processURL(x,url)
   return(df)
 })
 
 setMethodS3("getProfileData","CGDS", function(x, genes, geneticProfiles, caseList='', cases=c(), caseIdsKey = '', ...) {
-  url = paste(x$.url, "webservice.do?cmd=getProfileData",
+  url = .makeURL(x$.url, "webservice.do?cmd=getProfileData",
     "&gene_list=", paste(genes,collapse=","),
     "&genetic_profile_id=", paste(geneticProfiles,collapse=","),
-    "&id_type=", 'gene_symbol',
-    sep="")
+    "&id_type=", 'gene_symbol')
 
-  if (length(cases)>0) { url = paste(url,"&case_list=", paste(cases,collapse=","),sep='')
-  } else if (caseIdsKey != '') { url = paste(url,"&case_ids_key=", caseIdsKey,sep='')
-  } else { url = paste(url,"&case_set_id=", caseList,sep='') }
+  if (length(cases)>0) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
+  } else if (caseIdsKey != '') { url = paste0(url,"&case_ids_key=", caseIdsKey)
+  } else { url = paste0(url,"&case_set_id=", caseList) }
 
   df = processURL(x,url)
 
@@ -84,11 +87,11 @@ setMethodS3("getProfileData","CGDS", function(x, genes, geneticProfiles, caseLis
 })
 
 setMethodS3("getClinicalData","CGDS", function(x, caseList='', cases=c(), caseIdsKey = '', ...) {
-  url = paste(x$.url, "webservice.do?cmd=getClinicalData",sep="")
+  url = .makeURL(x$.url, "webservice.do?cmd=getClinicalData")
 
-  if (length(cases)>0) { url = paste(url,"&case_list=", paste(cases,collapse=","),sep='')
-  } else if (caseIdsKey != '') { url = paste(url,"&case_ids_key=", caseIdsKey,sep='')
-  } else { url = paste(url,"&case_set_id=", caseList,sep='') }
+  if (length(cases)>0) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
+  } else if (caseIdsKey != '') { url = paste0(url,"&case_ids_key=", caseIdsKey)
+  } else { url = paste0(url,"&case_set_id=", caseList) }
 
   df = processURL(x,url)
   rownames(df) = make.names(df[,1])
