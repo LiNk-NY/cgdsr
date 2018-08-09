@@ -63,7 +63,7 @@ setMethodS3("getProfileData","CGDS", function(x, genes, geneticProfiles, caseLis
     "&genetic_profile_id=", paste(geneticProfiles,collapse=","),
     "&id_type=", 'gene_symbol')
 
-  if (length(cases)>0) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
+  if (length(cases)) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
   } else if (caseIdsKey != '') { url = paste0(url,"&case_ids_key=", caseIdsKey)
   } else { url = paste0(url,"&case_set_id=", caseList) }
 
@@ -89,7 +89,7 @@ setMethodS3("getProfileData","CGDS", function(x, genes, geneticProfiles, caseLis
 setMethodS3("getClinicalData","CGDS", function(x, caseList='', cases=c(), caseIdsKey = '', ...) {
   url = .makeURL(x$.url, "webservice.do?cmd=getClinicalData")
 
-  if (length(cases)>0) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
+  if (length(cases)) { url = paste0(url,"&case_list=", paste(cases,collapse=","))
   } else if (caseIdsKey != '') { url = paste0(url,"&case_ids_key=", caseIdsKey)
   } else { url = paste0(url,"&case_set_id=", caseList) }
 
@@ -269,7 +269,7 @@ setMethodS3("plot","CGDS", function(x, cancerStudy, genes, geneticProfiles, case
       df.mut = df.mut[rownames(df.nona),1]
       # check if data is missing (NaN)
       mut=which(!is.na(df.mut))
-      if(length(mut)>0) {
+      if(length(mut)) {
         # default mutation
         col[mut]="red3"
         bg[mut]="goldenrod"
@@ -341,7 +341,7 @@ setMethodS3("plot","CGDS", function(x, cancerStudy, genes, geneticProfiles, case
       if (nrow(df.norm) == 0) { return(errormsg(paste('empty data frame returned :\n',colnames(df.norm)[1]))) }
       # remove missing data
       df.norm = df.norm[apply(df.norm, 1, function(x) {!any(is.na(x))}),]
-      if ( length(df.norm) > 0) {
+      if ( length(df.norm) ) {
         df = rbind(df,df.norm)
         col = append(col, rep("black",nrow(df.norm)))
         pch = append(pch, rep(20,nrow(df.norm)))
